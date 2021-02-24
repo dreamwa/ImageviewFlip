@@ -3,16 +3,19 @@
     package="com.example.myapplication">
 
     <application
+        android:name=".ImApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        <activity android:name=".MaterialEdittextActivity"></activity>
+        <activity android:name=".ConfigActivity" />
 
         <activity-alias
-            android:name="sss"
-            android:targetActivity=".MainActivity">
+            android:name=".sss"
+            android:targetActivity=".MaterialEdittextActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

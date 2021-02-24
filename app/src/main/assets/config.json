@@ -1,0 +1,28 @@
+{
+  "imageLoadService": {
+    "isOpen": true,
+    "loadType": "glide"
+  },
+  "imageWaterMarkService": {
+    "isOpen": false
+  },
+  "locationService": {
+    "isOpen": false
+  },
+  "navigationService": {
+    "isOpen": true,
+    "navigationType": "baidu"
+  },
+  "speechRecognitionService": {
+    "content": "content",
+    "isOpen": true
+  },
+  "speechSpeakService": {
+    "content": "content",
+    "isOpen": true
+  },
+  "updateService": {
+    "isOpen": true,
+    "updateUrl": "www.upload.com"
+  }
+}

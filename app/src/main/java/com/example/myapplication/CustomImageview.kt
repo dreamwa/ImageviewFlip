@@ -67,13 +67,13 @@ class CustomImageview(context: Context?, attrs: AttributeSet?) : View(context, a
         //左半部分
         canvas.save()
         canvas.translate(-(-LEFT - bitmap.width / 2f), -(-TOP - bitmap.height / 2f))
-
-        canvas.rotate(-90f)
+//
+        canvas.rotate(90f)
         camera.save()
         camera.rotateY(endFlip)
         camera.applyToCanvas(canvas)
         camera.restore()
-        canvas.rotate(90f)
+        canvas.rotate(-90f)
 
         canvas.rotate(-flipRotation)
         camera.save()

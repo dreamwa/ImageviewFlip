@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
                 startDelay = 1000
             }
         val ani3 =
-            ObjectAnimator.ofFloat(findViewById<ImageView>(R.id.view), "endFlip", -50f).apply {
+            ObjectAnimator.ofFloat(findViewById<ImageView>(R.id.view), "endFlip", 50f).apply {
                 duration = 1500
                 startDelay = 1000
             }
