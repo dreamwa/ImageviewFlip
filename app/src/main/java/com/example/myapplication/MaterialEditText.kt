@@ -40,7 +40,7 @@ class MaterialEditText(context: Context, attrs: AttributeSet?) : AppCompatEditTe
     val textOffset = Utils.dp2px(20f)
 
     //动画
-     var animator: ObjectAnimator? = null
+    lateinit var animator: ObjectAnimator
 
     //透明度
     var materialAlpha = 0f
@@ -79,11 +79,12 @@ class MaterialEditText(context: Context, attrs: AttributeSet?) : AppCompatEditTe
                 }
             }
         })
+
     }
 
-    fun getAlphaAnimator() : ObjectAnimator?{
-        if(animator == null){
-            animator = ObjectAnimator.ofFloat(this@MaterialEditText, "materialAlpha",0f,1f)
+    fun getAlphaAnimator(): ObjectAnimator? {
+        if (!this::animator.isInitialized) {
+            animator = ObjectAnimator.ofFloat(this@MaterialEditText, "materialAlpha", 0f, 1f)
         }
         return animator
     }
