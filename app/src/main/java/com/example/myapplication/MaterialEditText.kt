@@ -12,6 +12,7 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatEditText
+import java.util.HashMap
 
 class MaterialEditText(context: Context, attrs: AttributeSet?) : AppCompatEditText(context, attrs) {
     val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)

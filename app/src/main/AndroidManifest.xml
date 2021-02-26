@@ -10,12 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".MaterialEdittextActivity"></activity>
-        <activity android:name=".ConfigActivity" />
+        <activity android:name=".FlowLayoutActivity"></activity>
+        <activity android:name=".MaterialEdittextActivity" />
 
         <activity-alias
             android:name=".sss"
-            android:targetActivity=".MaterialEdittextActivity">
+            android:targetActivity=".FlowLayoutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,6 +23,7 @@
             </intent-filter>
         </activity-alias>
 
+        <activity android:name=".ConfigActivity" />
         <activity android:name=".MainActivity" />
     </application>
 
