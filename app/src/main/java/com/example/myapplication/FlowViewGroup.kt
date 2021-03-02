@@ -10,21 +10,20 @@ import androidx.core.view.marginLeft
 class FlowViewGroup(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) {
     val childrenBounds = arrayListOf<Rect>()
     val MARGINLR = 5.dp2px()
-    val MARGINTB = 2.dp2px()
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var usedWidth = 0
         var usedHeight = 0
-
         for (i in 0..childCount - 1) {
             val childView = getChildAt(i)
             measureChildWithMargins(
                 childView,
                 widthMeasureSpec,
-                usedWidth,
+                0,
                 heightMeasureSpec,
                 usedHeight
             )
+
 
             var rect = Rect()
             if (childrenBounds.size <= i) {
@@ -38,11 +37,9 @@ class FlowViewGroup(context: Context?, attrs: AttributeSet?) : ViewGroup(context
                 usedWidth + childView.measuredWidth,
                 usedHeight + childView.measuredHeight
             )
-            Log.e("TAG","usedWidth==${usedWidth},usedHeight==${usedHeight}")
-            Log.e("TAG","measuredWidth==${childView.measuredWidth}")
 
             usedWidth += (childView.measuredWidth + 2 * MARGINLR).toInt()
-            usedHeight = (childView.measuredHeight + 2 * MARGINTB).toInt()
+            usedHeight = (childView.measuredHeight).toInt()
         }
         val width = usedWidth
         val height = usedHeight
@@ -51,14 +48,14 @@ class FlowViewGroup(context: Context?, attrs: AttributeSet?) : ViewGroup(context
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        for (i in childrenBounds.indices) {
+        for (i in 0..childCount - 1) {
             val child = getChildAt(i)
             val childBounds = childrenBounds[i]
             child.layout(
                 (childBounds.left + MARGINLR).toInt(),
-                (childBounds.top + MARGINTB).toInt(),
+                (childBounds.top).toInt(),
                 (childBounds.right + MARGINLR).toInt(),
-                (childBounds.bottom + MARGINTB).toInt()
+                (childBounds.bottom).toInt()
             )
         }
     }

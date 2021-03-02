@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import kotlin.random.Random
 
@@ -22,6 +23,18 @@ class ColorTextView(context: Context?, attrs: AttributeSet?) : View(context, att
 
     init {
         mPaint.textSize = 12.dp2px()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val width = resolveSize(widthSize, widthMode)
+        val height = resolveSize(heightSize, heightMode)
+        setMeasuredDimension(width, height)
+
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -51,7 +64,7 @@ class ColorTextView(context: Context?, attrs: AttributeSet?) : View(context, att
                 mPaint.color = Color.WHITE
                 canvas.drawText(
                     texts[indexBounds],
-                    PADDINGLR-bounds0.left,
+                    PADDINGLR - bounds0.left,
                     -offset.toFloat() + PADDINGTB,
                     mPaint
                 )
@@ -67,7 +80,7 @@ class ColorTextView(context: Context?, attrs: AttributeSet?) : View(context, att
                 mPaint.color = Color.WHITE
                 canvas.drawText(
                     texts[indexBounds],
-                    PADDINGLR-bounds1.left,
+                    PADDINGLR - bounds1.left,
                     -offset.toFloat() + PADDINGTB,
                     mPaint
                 )
@@ -83,7 +96,7 @@ class ColorTextView(context: Context?, attrs: AttributeSet?) : View(context, att
                 mPaint.color = Color.WHITE
                 canvas.drawText(
                     texts[indexBounds],
-                    PADDINGLR-bounds2.left,
+                    PADDINGLR - bounds2.left,
                     -offset.toFloat() + PADDINGTB,
                     mPaint
                 )
@@ -99,7 +112,7 @@ class ColorTextView(context: Context?, attrs: AttributeSet?) : View(context, att
                 mPaint.color = Color.WHITE
                 canvas.drawText(
                     texts[indexBounds],
-                    PADDINGLR-bounds3.left,
+                    PADDINGLR - bounds3.left,
                     -offset.toFloat() + PADDINGTB,
                     mPaint
                 )
@@ -107,5 +120,9 @@ class ColorTextView(context: Context?, attrs: AttributeSet?) : View(context, att
         }
 
 
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        return super.dispatchTouchEvent(event)
     }
 }
