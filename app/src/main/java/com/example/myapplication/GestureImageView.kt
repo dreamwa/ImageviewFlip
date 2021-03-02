@@ -143,10 +143,10 @@ class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, 
         when (isBig) {
             true -> {
                 secondOffsetX -= distanceX
-//                Log.e(
-//                    "TAG",
-//                    "bitmapWidth==${bitmap.width},bigScale==${bigScale},bigRatio==${bigRatio},width==${width}"
-//                )
+                Log.e(
+                    "TAG",
+                    "bitmapWidth==${bitmap.width},bigScale==${bigScale},bigRatio==${bigRatio},width==${width}"
+                )
                 Log.e("TAG", "secondOffsetX1==${secondOffsetX}")
                 secondOffsetX = Math.min(secondOffsetX, (bitmap.width * bigScale - width) / 2)
                 secondOffsetX = Math.max(secondOffsetX, -(bitmap.width * bigScale - width) / 2)
@@ -155,20 +155,20 @@ class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, 
                 secondOffsetY = Math.min(secondOffsetY, (bitmap.height * bigScale - height) / 2f)
                 secondOffsetY = Math.max(secondOffsetY, -(bitmap.height * bigScale - height) / 2f)
                 invalidate()
-//                Log.e("TAG", "bitmapWidth==${bitmap.width}")
+                Log.e("TAG", "bitmapWidth==${bitmap.width}")
             }
             else -> {
-//                Log.e("TAG", "bitmapWidth==${bitmap.width}")
+                Log.e("TAG", "bitmapWidth==${bitmap.width}")
             }
         }
-//        Log.e(
-//            "TAG",
-//            "onScroll,x1==${e1.x},rawX1==${e1.rawX},y1==${e1.y},rawY1==${e1.rawY},distanceX==${distanceX}"
-//        )
-//        Log.e(
-//            "TAG",
-//            "onScroll,x2==${e2.x},rawX2==${e2.rawX},y2==${e2.y},rawY2==${e2.rawY},distanceY==${distanceY}"
-//        )
+        Log.e(
+            "TAG",
+            "onScroll,x1==${e1.x},rawX1==${e1.rawX},y1==${e1.y},rawY1==${e1.rawY},distanceX==${distanceX}"
+        )
+        Log.e(
+            "TAG",
+            "onScroll,x2==${e2.x},rawX2==${e2.rawX},y2==${e2.y},rawY2==${e2.rawY},distanceY==${distanceY}"
+        )
         return true
     }
 
