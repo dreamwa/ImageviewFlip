@@ -9,12 +9,12 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
 
-class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs),
-    GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, Runnable {
+class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     var bitmap: Bitmap
 
@@ -36,9 +36,13 @@ class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, 
     //外贴边再放大的倍数
     val bigRatio = 1.5f
 
-    var gustureDetector: GestureDetectorCompat
+    var gestureDetector: GestureDetectorCompat
+//    var scaleGestureDetector : ScaleGestureDetector
     var overScroller: OverScroller
     var isBig = false
+
+    val mySimpleOnGestureListener = MySimpleOnGestureListener()
+    val myFlingRunnable = MyFlingRunnable()
 
 
     //动画参数
@@ -55,8 +59,8 @@ class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, 
     init {
         bitmap = BitmapUtils.getAvatar(resources, 200.dp2px().toInt())
 
-        gustureDetector = GestureDetectorCompat(context, this)
-        gustureDetector.setIsLongpressEnabled(false)
+        gestureDetector = GestureDetectorCompat(context, mySimpleOnGestureListener)
+        gestureDetector.setIsLongpressEnabled(false)
         overScroller = OverScroller(context)
     }
 
@@ -75,132 +79,18 @@ class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, 
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return gustureDetector.onTouchEvent(event)
+        return gestureDetector.onTouchEvent(event)
     }
 
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.translate(secondOffsetX, secondOffsetY)
+        canvas.translate(secondOffsetX * scaleOffest, secondOffsetY * scaleOffest)
 
 
         var scale = smallScale + (bigScale - smallScale) * scaleOffest
         canvas.scale(scale, scale, width.toFloat() / 2, height.toFloat() / 2)
         canvas.drawBitmap(bitmap, firstOffsetX, firstOffsetY, mPaint)
-    }
-
-
-    override fun onDown(e: MotionEvent?): Boolean {
-        Log.e("TAG", "onDown")
-        return true
-    }
-
-    override fun onShowPress(e: MotionEvent?) {
-        Log.e("TAG", "onShowPress")
-    }
-
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        Log.e("TAG", "onSingleTapUp")
-        return true
-    }
-
-
-    override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-        Log.e("TAG", "onFling")
-        when (isBig) {
-            true -> {
-                overScroller.fling(
-                    secondOffsetX.toInt(),
-                    secondOffsetY.toInt(),
-                    velocityX.toInt(),
-                    velocityY.toInt(),
-                    -(bitmap.width * bigScale - width).toInt() / 2,
-                    (bitmap.width * bigScale - width).toInt() / 2,
-                    -(bitmap.height * bigScale - height).toInt() / 2,
-                    (bitmap.height * bigScale - height).toInt() / 2,
-                    30.dp2px().toInt(),
-                    30.dp2px().toInt()
-                )
-
-                postOnAnimation(this)
-            }
-        }
-
-        return true
-    }
-
-    override fun onScroll(
-        e1: MotionEvent,
-        e2: MotionEvent,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        when (isBig) {
-            true -> {
-                secondOffsetX -= distanceX
-                Log.e(
-                    "TAG",
-                    "bitmapWidth==${bitmap.width},bigScale==${bigScale},bigRatio==${bigRatio},width==${width}"
-                )
-                Log.e("TAG", "secondOffsetX1==${secondOffsetX}")
-                secondOffsetX = Math.min(secondOffsetX, (bitmap.width * bigScale - width) / 2)
-                secondOffsetX = Math.max(secondOffsetX, -(bitmap.width * bigScale - width) / 2)
-
-                secondOffsetY -= distanceY
-                secondOffsetY = Math.min(secondOffsetY, (bitmap.height * bigScale - height) / 2f)
-                secondOffsetY = Math.max(secondOffsetY, -(bitmap.height * bigScale - height) / 2f)
-                invalidate()
-                Log.e("TAG", "bitmapWidth==${bitmap.width}")
-            }
-            else -> {
-                Log.e("TAG", "bitmapWidth==${bitmap.width}")
-            }
-        }
-        Log.e(
-            "TAG",
-            "onScroll,x1==${e1.x},rawX1==${e1.rawX},y1==${e1.y},rawY1==${e1.rawY},distanceX==${distanceX}"
-        )
-        Log.e(
-            "TAG",
-            "onScroll,x2==${e2.x},rawX2==${e2.rawX},y2==${e2.y},rawY2==${e2.rawY},distanceY==${distanceY}"
-        )
-        return true
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
-        Log.e("TAG", "onLongPress")
-    }
-
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
-        Log.e("TAG", "onDoubleTap")
-        isBig = !isBig
-        when (isBig) {
-            true -> {
-                getMyScaleAnimator().start()
-            }
-            else -> {
-                getMyScaleAnimator().reverse()
-                secondOffsetX = 0f
-                secondOffsetY = 0f
-            }
-        }
-
-        return true
-    }
-
-    override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
-        Log.e("TAG", "onDoubleTapEvent")
-        return true
-    }
-
-    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-        Log.e("TAG", "onSingleTapConfirmed")
-        return true
     }
 
     fun getMyScaleAnimator(): ObjectAnimator {
@@ -210,15 +100,135 @@ class GestureImageView(context: Context?, attrs: AttributeSet?) : View(context, 
         return scaleAnimator
     }
 
-    override fun run() {
-        if (overScroller.computeScrollOffset()) {
-            secondOffsetX = overScroller.currX.toFloat()
-            secondOffsetY = overScroller.currY.toFloat()
-            invalidate()
-            postOnAnimation(this)
+    inner class MySimpleOnGestureListener : GestureDetector.SimpleOnGestureListener() {
+        override fun onDown(e: MotionEvent?): Boolean {
+            Log.e("TAG", "onDown")
+            return true
+        }
+
+        override fun onShowPress(e: MotionEvent?) {
+            Log.e("TAG", "onShowPress")
+        }
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            Log.e("TAG", "onSingleTapUp")
+            return true
+        }
+
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent?,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            Log.e("TAG", "onFling")
+            when (isBig) {
+                true -> {
+                    overScroller.fling(
+                        secondOffsetX.toInt(),
+                        secondOffsetY.toInt(),
+                        velocityX.toInt(),
+                        velocityY.toInt(),
+                        -(bitmap.width * bigScale - width).toInt() / 2,
+                        (bitmap.width * bigScale - width).toInt() / 2,
+                        -(bitmap.height * bigScale - height).toInt() / 2,
+                        (bitmap.height * bigScale - height).toInt() / 2,
+                        30.dp2px().toInt(),
+                        30.dp2px().toInt()
+                    )
+
+                    postOnAnimation(myFlingRunnable)
+                }
+            }
+
+            return true
+        }
+
+        override fun onScroll(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            when (isBig) {
+                true -> {
+                    secondOffsetX -= distanceX
+                    Log.e(
+                        "TAG",
+                        "bitmapWidth==${bitmap.width},bigScale==${bigScale},bigRatio==${bigRatio},width==${width}"
+                    )
+                    Log.e("TAG", "secondOffsetX1==${secondOffsetX}")
+                    secondOffsetX = Math.min(secondOffsetX, (bitmap.width * bigScale - width) / 2)
+                    secondOffsetX = Math.max(secondOffsetX, -(bitmap.width * bigScale - width) / 2)
+
+                    secondOffsetY -= distanceY
+                    secondOffsetY =
+                        Math.min(secondOffsetY, (bitmap.height * bigScale - height) / 2f)
+                    secondOffsetY =
+                        Math.max(secondOffsetY, -(bitmap.height * bigScale - height) / 2f)
+                    invalidate()
+                    Log.e("TAG", "bitmapWidth==${bitmap.width}")
+                }
+                else -> {
+                    Log.e("TAG", "bitmapWidth==${bitmap.width}")
+                }
+            }
+            Log.e(
+                "TAG",
+                "onScroll,x1==${e1.x},rawX1==${e1.rawX},y1==${e1.y},rawY1==${e1.rawY},distanceX==${distanceX}"
+            )
+            Log.e(
+                "TAG",
+                "onScroll,x2==${e2.x},rawX2==${e2.rawX},y2==${e2.y},rawY2==${e2.rawY},distanceY==${distanceY}"
+            )
+            return true
+        }
+
+        override fun onLongPress(e: MotionEvent?) {
+            Log.e("TAG", "onLongPress")
+        }
+
+        override fun onDoubleTap(e: MotionEvent): Boolean {
+            Log.e("TAG", "onDoubleTap")
+            secondOffsetX = (e.x - width / 2f) - (e.x - width / 2f) * bigScale / smallScale
+            secondOffsetY = (e.y - height / 2f) - (e.y - height / 2f) * bigScale / smallScale
+
+            isBig = !isBig
+            when (isBig) {
+                true -> {
+                    getMyScaleAnimator().start()
+                }
+                else -> {
+                    getMyScaleAnimator().reverse()
+
+                }
+            }
+
+            return true
+        }
+
+        override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+            Log.e("TAG", "onDoubleTapEvent")
+            return true
+        }
+
+        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+            Log.e("TAG", "onSingleTapConfirmed")
+            return true
+        }
+    }
+
+    inner class MyFlingRunnable : Runnable {
+        override fun run() {
+            if (overScroller.computeScrollOffset()) {
+                secondOffsetX = overScroller.currX.toFloat()
+                secondOffsetY = overScroller.currY.toFloat()
+                invalidate()
+                postOnAnimation(myFlingRunnable)
+            }
         }
 
     }
-
 
 }
