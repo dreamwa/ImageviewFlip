@@ -14,16 +14,16 @@ class  TouchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_touch)
 
-        for (i in 0..20){
-            lists.add("iiiiii")
-        }
-
-        rvAdapter = RvAdapter(this,lists)
-        r1.layoutManager = LinearLayoutManager(this)
-        r2.layoutManager = LinearLayoutManager(this)
-
-        r1.adapter = rvAdapter
-        r2.adapter = rvAdapter
+//        for (i in 0..20){
+//            lists.add("iiiiii")
+//        }
+//
+//        rvAdapter = RvAdapter(this,lists)
+//        r1.layoutManager = LinearLayoutManager(this)
+//        r2.layoutManager = LinearLayoutManager(this)
+//
+//        r1.adapter = rvAdapter
+//        r2.adapter = rvAdapter
 
     }
 }
